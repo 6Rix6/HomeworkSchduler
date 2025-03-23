@@ -38,7 +38,7 @@ const AddTaskDrawer = ({ isVisible, onClose }:any) => {
       deviceWidth={deviceWidth}
       deviceHeight={deviceHeight}
       >
-        <View style={styles.drawer} className={`w-screen mt-auto outline-2 outline-primary-100 ${colorScheme=="dark"?"bg-primary-950":"bg-primary-50"}`}>
+        <View style={styles.drawer} className={`w-screen mt-auto outline-2 outline-primary-100 ${colorScheme=="dark"?"bg-primary-1000":"bg-primary-50"}`}>
           <View style={styles.headerContainer}>
             <Text style={styles.drawerTitle} className={`mt-auto mb-auto ${colorScheme=="dark"?"text-white":"text-[#333]"}`}>新しいタスク</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>

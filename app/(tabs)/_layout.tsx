@@ -23,7 +23,7 @@ import "@/global.css"
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const appBarBackground = colorScheme=="dark"?primaryColors[950]:primaryColors[50];
+  const appBarBackground = colorScheme=="dark"?primaryColors[1000]:primaryColors[50];
   const [isDrawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     height: 70,
-    borderRadius: 20,
+    borderRadius: 8,
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     shadowColor: "#000",
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
     width: 70,
     height: 70,
     borderRadius: 35,
-    backgroundColor: "#14b8a6",
+    backgroundColor: primaryColors[500],
     justifyContent: "center",
     alignItems: "center",
     position: "relative",

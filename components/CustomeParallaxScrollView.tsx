@@ -4,6 +4,7 @@ import { Text, View ,ScrollView, StyleSheet,Image } from 'react-native';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { primaryColors } from '@/constants/Colors';
 
 
 
@@ -17,7 +18,7 @@ export default function CustomParallaxScrollView({title,icon,children}:Props){
     
     return (
         <ParallaxScrollView
-            headerBackgroundColor={{ light: '#14b8a6', dark: '#042f2e' }}
+            headerBackgroundColor={{ light: primaryColors['500'], dark: primaryColors['1000'] }}
             headerImage={
               <View className='flex-row flex-1 items-center w-full'>
                 <View className='p-5'>
@@ -34,8 +35,8 @@ export default function CustomParallaxScrollView({title,icon,children}:Props){
                   </View>
               </View>
         }>
-        <View className='flex items-center justify-start p-5 flex-col'>
-            {children}
+        <View className='w-full h-full'>
+        {children}
         </View>
       </ParallaxScrollView>
       );

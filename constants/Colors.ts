@@ -16,6 +16,7 @@ export const primaryColors = {
   '800': '#115e59',
   '900': '#134e4a',
   '950': '#042f2e',
+  '1000': '#021414',
 }
 
 const tintColorLight = primaryColors[500];
