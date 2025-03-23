@@ -15,3 +15,5 @@ export default function HomeScreen() {
     </CustomParallaxScrollView>
   );
 }
+
+{/** 問題 ：　プレビルドだとダークモードが効かない*/}
