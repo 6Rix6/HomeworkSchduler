@@ -6,8 +6,6 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import AddHomework from '@/components/AddHomework';
 import { MMKV } from 'react-native-mmkv';
 
-const storage = new MMKV();
-
 export default function HomeScreen() {
   const { kind } = useLocalSearchParams();
 
