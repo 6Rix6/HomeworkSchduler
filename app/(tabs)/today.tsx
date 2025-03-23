@@ -7,7 +7,7 @@ export default function HomeScreen() {
   const colorScheme = useColorScheme();
 
   return (
-  <CustomParallaxScrollView title='Home' icon="home">
+  <CustomParallaxScrollView title='Today' icon="today">
   </CustomParallaxScrollView>
   );
 }
