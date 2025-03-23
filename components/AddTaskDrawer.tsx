@@ -6,12 +6,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as NavigationBar from 'expo-navigation-bar';
 import { useEffect, useState } from 'react';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useRouter } from 'expo-router';
 
 const deviceWidth = Dimensions.get('window').width;
 const deviceHeight = Dimensions.get('window').height;
 
 const AddTaskDrawer = ({ isVisible, onClose }:any) => {
   const colorScheme = useColorScheme();
+  const router = useRouter();
   useEffect(() => {
     NavigationBar.setPositionAsync('absolute');
     NavigationBar.setBackgroundColorAsync('transparent');
@@ -37,16 +39,21 @@ const AddTaskDrawer = ({ isVisible, onClose }:any) => {
       deviceHeight={deviceHeight}
       >
         <View style={styles.drawer} className={`w-screen mt-auto outline-2 outline-primary-100 ${colorScheme=="dark"?"bg-primary-950":"bg-primary-50"}`}>
-          <Text style={styles.drawerTitle} className={`${colorScheme=="dark"?"text-white":"text-[#333]"}`}>新しいタスク</Text>
-          <TouchableOpacity style={styles.drawerItem} onPress={onClose}>
+          <View style={styles.headerContainer}>
+            <Text style={styles.drawerTitle} className={`mt-auto mb-auto ${colorScheme=="dark"?"text-white":"text-[#333]"}`}>新しいタスク</Text>
+            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+              <Ionicons name="close" size={24} color={colorScheme=="dark"?"#fff":"#333"} />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.drawerItem} onPress={()=>{router.push({pathname:"/addTask",params:{kind:"homework"}});onClose();}}>
             <Ionicons name="book-outline" size={24} color={colorScheme=="dark"?"#fff":"#333"} />
             <Text style={styles.drawerText} className={`${colorScheme=="dark"?"text-white":"text-black"}`}>宿題を追加</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.drawerItem} onPress={onClose}>
+          <TouchableOpacity style={styles.drawerItem} onPress={()=>{router.push({pathname:"/addTask",params:{kind:"selfStudy"}});onClose();}}>
             <Ionicons name="checkmark-outline" size={24} color={colorScheme=="dark"?"#fff":"#333"} />
             <Text style={styles.drawerText} className={`${colorScheme=="dark"?"text-white":"text-black"}`}>自主学習を追加</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.drawerItem} onPress={onClose}>
+          <TouchableOpacity style={styles.drawerItem} onPress={()=>{router.push({pathname:"/addTask",params:{kind:"test"}});onClose();}}>
             <Ionicons name="calendar-outline" size={24} color={colorScheme=="dark"?"#fff":"#333"} />
             <Text style={styles.drawerText} className={`${colorScheme=="dark"?"text-white":"text-black"}`}>テストの予定を追加</Text>
           </TouchableOpacity>
@@ -70,10 +77,20 @@ const styles = StyleSheet.create({
     minHeight: 300,
     elevation: 50,
   },
+  headerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 20,
+  },
+  closeButton: {
+  },
   drawerTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginTop: "auto",
+    marginBottom: "auto",
   },
   drawerItem: {
     flexDirection: "row",

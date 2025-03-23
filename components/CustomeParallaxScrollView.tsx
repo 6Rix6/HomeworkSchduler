@@ -30,6 +30,7 @@ export default function CustomParallaxScrollView({title,icon,children}:Props){
                   {icon == "today"    && <Ionicons  name="today-outline"  size={150} color={"#99f6e4"} />}
                   {icon == "bars" && <AntDesign name={"bars"} size={150} color={"#99f6e4"} style={{marginTop:-10}}/>}
                   {icon == "calendar" && <AntDesign name={"calendar"} size={130} color={"#99f6e4"} style={{marginTop:-10}}/>}
+                  {icon == "add" && <AntDesign name={"plus"} size={150} color={"#99f6e4"} style={{marginTop:-10}}/>}
                   </View>
               </View>
         }>
