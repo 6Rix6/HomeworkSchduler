@@ -4,7 +4,6 @@ import CustomParallaxScrollView from '@/components/CustomeParallaxScrollView';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import AddHomework from '@/components/AddHomework';
-import { MMKV } from 'react-native-mmkv';
 
 export default function HomeScreen() {
   const { kind } = useLocalSearchParams();

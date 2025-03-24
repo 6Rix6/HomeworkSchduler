@@ -6,30 +6,23 @@ import { useRouter } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { primaryColors } from '@/constants/Colors';
 import { Ionicons } from "@expo/vector-icons";
-import { MMKV } from 'react-native-mmkv';
-
-type Task = {
-  kind: string;
-  name: string;
-  dueDate: Date;
-  priority: number | null;
-  status: string;
-};
+import { TaskType } from '@/constants/typescript.types';
+import { storage } from '@/constants/strage';
 
 export default function AddHomework() {
-    const deviceWidth = Dimensions.get('window').width;
     const deviceHeight = Dimensions.get('window').height;
     
     const colorScheme = useColorScheme();
     const router = useRouter();
-    const [task, setTask] = useState<Task>({
+    const [task, setTask] = useState<TaskType>({
+        id: '',
         kind: 'homework',
         name: '',
         dueDate: new Date(),
+        dueTime: new Date(),
         priority: null,
         status: '未着手',
     });
-    //const [date, setDate] = useState(new Date());
     const [datePickerVisible, setDatePickerVisible] = useState<boolean>(Platform.OS === 'ios');
     const [timePickerVisible, setTimePickerVisible] = useState<boolean>(Platform.OS === 'ios');
     const [isDateSelected, setIsDateSelected] = useState<boolean>(false);
@@ -53,11 +46,43 @@ export default function AddHomework() {
     const onTimeChange = (event: any, selectedDate: Date | undefined) => {
         const currentDate = selectedDate || new Date();
         setTimePickerVisible(Platform.OS === 'ios');
-        setTask({ ...task, dueDate: currentDate });
+        setTask({ ...task, dueTime: currentDate });
         setIsTimeSelected(true);
-    };  
+    };
+
+    const saveTask = (newTask: TaskType) => {
+        try {
+            // 既存のタスクを取得
+            const existingTasksJson = storage.getString('tasks');
+            const existingTasks: TaskType[] = existingTasksJson ? JSON.parse(existingTasksJson) : [];
+            
+            // 新しいタスクにIDを付与
+            const taskWithId = {
+                ...newTask,
+                id: Date.now().toString(),
+                dueDate: newTask.dueDate.toISOString(), // Dateオブジェクトを文字列に変換
+                dueTime: newTask.dueTime.toISOString(), // Dateオブジェクトを文字列に変換
+            };
+            
+            // タスクを配列に追加
+            const updatedTasks = [...existingTasks, taskWithId];
+
+            // 保存
+            storage.set('tasks', JSON.stringify(updatedTasks));            
+            return true;
+        } catch (error) {
+            console.error('タスクの保存に失敗しました:', error);
+            return false;
+        }
+    };
 
     const showCompletionAnimation = () => {
+        const saveResult = saveTask(task);
+        if (!saveResult) {
+            console.error('タスクの保存に失敗しました');
+            return;
+        }
+
         setIsCompleted(true);
         Animated.sequence([
             Animated.parallel([
@@ -82,8 +107,21 @@ export default function AddHomework() {
             setIsCompleted(false);
             scaleAnim.setValue(0);
             router.push('/task');
+            setTask({
+                id: '',
+                kind: 'homework',
+                name: '',
+                dueDate: new Date(),
+                dueTime: new Date(),
+                priority: null,
+                status: '未着手',
+            });
+            setIsDateSelected(false);
+            setIsTimeSelected(false);
         });
     };
+
+
 
     return (
     <View className='w-full h-screen'>
@@ -111,7 +149,7 @@ export default function AddHomework() {
                 </View>
 
                 {/* 日時選択 */}
-                <View className='w-full mt-10'>
+                <View className='w-full mt-5'>
                     <Text className={`text-xl font-bold ${colorScheme=="dark"?"text-primary-200":"text-primary-500"}`}>期限</Text>
                     <View className='flex flex-row justify-between items-center mt-2'>
                         { Platform.OS === 'android' &&
@@ -145,7 +183,7 @@ export default function AddHomework() {
                         }
                         { timePickerVisible &&
                             <DateTimePicker
-                            value={task.dueDate!=null?task.dueDate:new Date()}
+                            value={task.dueTime!=null?task.dueTime:new Date()}
                             mode="time"
                             is24Hour={true}
                             display="default"
@@ -160,7 +198,7 @@ export default function AddHomework() {
 
 
                 {/* 優先度選択 */}
-                <View className='w-full mt-10'>
+                <View className='w-full mt-5'>
                     <Text className={`text-xl font-bold ${colorScheme=="dark"?"text-primary-200":"text-primary-500"}`}>優先度</Text>
                     <TextInput
                         keyboardType='numeric'
@@ -182,18 +220,8 @@ export default function AddHomework() {
                         console.log('未入力');
                         return;
                     }
-                    console.log(task);
-
+                    //console.log(task);
                     showCompletionAnimation();
-                    setTask({
-                        kind: 'homework',
-                        name: '',
-                        dueDate: new Date(),
-                        priority: null,
-                        status: '未着手',
-                    });
-                    setIsDateSelected(false);
-                    setIsTimeSelected(false);
                 }}
             >
                 <Text className={`text-lg font-bold ${colorScheme=="dark"?"text-black":"text-white"}`}>追加</Text>
@@ -223,6 +251,7 @@ export default function AddHomework() {
                             backgroundColor: colorScheme == "dark" ? primaryColors[200] : primaryColors[500],
                             borderRadius: 50,
                             padding: 20,
+                            top: -50,
                         }}
                     >
                         <Ionicons name="checkmark-circle-outline" size={50} color={colorScheme == "dark" ? "black" : "white"} />
@@ -231,7 +260,7 @@ export default function AddHomework() {
                         style={{
                             color: 'white',
                             fontSize: 18,
-                            marginTop: 20,
+                            marginTop: 0,
                             fontWeight: 'bold',
                         }}
                     >
