@@ -7,7 +7,7 @@ import TabBarBackground from '@/components/ui/TabBarBackground';
 import { Colors } from '@/constants/Colors';
 import { primaryColors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import AddTaskDrawer from '@/components/AddTaskDrawer';
+import AddTaskDrawer from '@/components/AddTaskDrawerTest';
 
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
@@ -82,7 +82,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
-      <AddTaskDrawer isVisible={isDrawerOpen} onClose={() => setDrawerOpen(false)} />
+    <AddTaskDrawer isVisible={isDrawerOpen} onClose={() => setDrawerOpen(false)}/>
     </>
   );
 }

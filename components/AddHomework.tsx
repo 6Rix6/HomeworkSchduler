@@ -6,7 +6,7 @@ import { useRouter } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { primaryColors } from '@/constants/Colors';
 import { Ionicons } from "@expo/vector-icons";
-import { TaskType } from '@/constants/typescript.types';
+import { TaskTypeOld } from '@/constants/typescript.types';
 import { storage } from '@/constants/strage';
 
 export default function AddHomework() {
@@ -14,7 +14,7 @@ export default function AddHomework() {
     
     const colorScheme = useColorScheme();
     const router = useRouter();
-    const [task, setTask] = useState<TaskType>({
+    const [task, setTask] = useState<TaskTypeOld>({
         id: '',
         kind: 'homework',
         name: '',
@@ -50,11 +50,11 @@ export default function AddHomework() {
         setIsTimeSelected(true);
     };
 
-    const saveTask = (newTask: TaskType) => {
+    const saveTask = (newTask: TaskTypeOld) => {
         try {
             // 既存のタスクを取得
             const existingTasksJson = storage.getString('tasks');
-            const existingTasks: TaskType[] = existingTasksJson ? JSON.parse(existingTasksJson) : [];
+            const existingTasks: TaskTypeOld[] = existingTasksJson ? JSON.parse(existingTasksJson) : [];
             
             // 新しいタスクにIDを付与
             const taskWithId = {
