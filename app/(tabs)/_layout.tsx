@@ -74,10 +74,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="calendar"
+        name="chat"
         options={{
-          title: 'Calendar',
-          tabBarIcon: ({ color }) => <AntDesign name="calendar" size={25} color={color} />,
+          title: 'Chat',
+          tabBarIcon: ({ color }) => <AntDesign name="message1" size={25} color={color} />,
           tabBarButton: (props) => <NoRippleButton {...props} />,
         }}
       />

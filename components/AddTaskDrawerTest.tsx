@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { useRouter } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { TaskType } from '@/constants/typescript.types';
+import { storage } from '@/constants/storage';
 import Entypo from '@expo/vector-icons/Entypo';
 
 const deviceWidth = Dimensions.get('window').width;
@@ -60,7 +61,6 @@ const AddTaskDrawer = ({ isVisible, onClose }:any) => {
       return;
     }
     const currentTime = selectedTime || new Date();
-    //console.log(currentTime.toString());
     setTimePickerVisible(Platform.OS === 'ios');
     setDate(currentTime);
     setD1(currentTime.getFullYear() + '/' + ('0' + (currentTime.getMonth() + 1)).slice(-2) + '/' +('0' + currentTime.getDate()).slice(-2) + '   ' +  ('0' + currentTime.getHours()).slice(-2) + ':' + ('0' + currentTime.getMinutes()).slice(-2));
@@ -68,7 +68,6 @@ const AddTaskDrawer = ({ isVisible, onClose }:any) => {
   };
 
   const handleClose = () => {
-    // すべてのstateをリセット
     setSelectedTaskType("");
     setDatePickerVisible(false);
     setTimePickerVisible(false);
@@ -79,6 +78,43 @@ const AddTaskDrawer = ({ isVisible, onClose }:any) => {
     }    
     onClose();
   };
+
+  const handleAdd = () => {
+    if(task.name == "" || d1 == "" || task.kind == ""){
+      return;
+    }
+    saveTask(task);
+  };
+
+  const saveTask = (newTask: TaskType) => {
+    try {
+        // 既存のタスクを取得
+        const existingTasksJson = storage.getString('tasks');
+        const existingTasks: TaskType[] = existingTasksJson ? JSON.parse(existingTasksJson) : [];
+        
+        // 新しいタスクにIDを付与
+        const taskWithId = {
+            ...newTask,
+            id: Date.now().toString(),
+            dueDate: newTask.dueDate.toISOString(), // Dateオブジェクトを文字列に変換
+        };
+        
+        // タスクを配列に追加
+        const updatedTasks = [...existingTasks, taskWithId];
+
+        // 期限でソート
+        updatedTasks.sort((a:any, b:any) =>  Date.parse(new Date(a.dueDate).toString()) - Date.parse(new Date(b.dueDate).toString()));
+        // 保存
+        storage.set('tasks', JSON.stringify(updatedTasks));            
+        return true;
+    } catch (error) {
+        console.error('タスクの保存に失敗しました:', error);
+        return false;
+    } finally {
+      handleClose();
+      router.push("/task");
+    }
+};
 
   return (
     <View className="h-screen absolute">
@@ -150,6 +186,7 @@ const AddTaskDrawer = ({ isVisible, onClose }:any) => {
               <TouchableOpacity 
                 className={`border-b-2 text-xl border-primary-500 rounded-lg p-2 w-full ${colorScheme=="dark"?"bg-primary-1000":"bg-primary-50"}`}
                 onPress={() => setDatePickerVisible(true)}
+                activeOpacity={0.5}
               >
                 <Text className={`text-xl text-black  ${d1!=""? "":"text-gray-500"}`}>{d1!=""? d1:"期限を選択"}</Text>
               </TouchableOpacity>
@@ -157,9 +194,7 @@ const AddTaskDrawer = ({ isVisible, onClose }:any) => {
             <View className="mt-5">
               <TouchableOpacity 
               className="bg-primary-500 rounded-lg p-2 w-full"
-              onPress={() => {
-                console.log(task.dueDate.toString());
-              }}
+              onPress={handleAdd}
               >
                 <Text className="text-xl text-white text-center">追加</Text>
               </TouchableOpacity>

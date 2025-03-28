@@ -7,7 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { primaryColors } from '@/constants/Colors';
 import { Ionicons } from "@expo/vector-icons";
 import { TaskTypeOld } from '@/constants/typescript.types';
-import { storage } from '@/constants/strage';
+import { storage } from '@/constants/storage';
 
 export default function AddHomework() {
     const deviceHeight = Dimensions.get('window').height;
@@ -61,7 +61,7 @@ export default function AddHomework() {
                 ...newTask,
                 id: Date.now().toString(),
                 dueDate: newTask.dueDate.toISOString(), // Dateオブジェクトを文字列に変換
-                dueTime: newTask.dueTime.toISOString(), // Dateオブジェクトを文字列に変換
+                dueTime: newTask.dueTime.toISOString(),
             };
             
             // タスクを配列に追加
